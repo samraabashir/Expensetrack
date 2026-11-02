@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Expense - ExpenseTrack</title>
+</head>
+<body>
+
+    <h1>ExpenseTrack</h1>
+    <h2>Add Expense</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Expense Name:</label>
+        <input type="text" name="name" required>
+
+        <br><br>
+
+        <label>Amount:</label>
+        <input type="number" name="amount" step="0.01" required>
+
+        <br><br>
+
+        <label>Category:</label>
+<select name="category" required>
+    <option value="">-- Select a category --</option>
+    <option value="Food">Food & Groceries</option>
+    <option value="Transportation">Transportation</option>
+    <option value="Utilities">Electricity, Water & Internet</option>
+    <option value="Rent">Rent</option>
+    <option value="Salary">Salaries & Wages</option>
+    <option value="Supplies">Business Supplies</option>
+    <option value="Marketing">Marketing & Advertising</option>
+    <option value="Maintenance">Repairs & Maintenance</option>
+    <option value="Taxes">Taxes & Government Fees</option>
+    <option value="Other">Other</option>
+</select>
+
+        <br><br>
+
+        <label>Date:</label>
+        <input type="date" name="date" required>
+
+        <br><br>
+
+        <label>Description:</label>
+        <br>
+        <textarea name="description"></textarea>
+
+        <br><br>
+
+        <button type="submit">Add Expense</button>
+    </form>
+
+    <br>
+
+    <a href="{% url 'seller_dashboard' %}">
+        <button>Back to Dashboard</button>
+    </a>
+
+</body>
+</html>

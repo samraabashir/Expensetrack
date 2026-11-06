@@ -26,8 +26,11 @@
                 {{ expense.date }}
 
                 <a href="{% url 'edit_expense' expense.id %}">
-            <button>Edit</button>
-        </a>
+                    <button>Edit</button>
+                </a>
+                <a href="{% url 'delete_expense' expense.id %}">
+                    <button>Delete</button>
+                </a>
             </li>
         {% endfor %}
     </ul>

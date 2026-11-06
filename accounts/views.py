@@ -1,5 +1,6 @@
-from django.contrib.auth import authenticate, login,logout
-from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect,get_object_or_404
 from . models import User, Expense
 
 
@@ -25,6 +26,7 @@ def seller_login(request):
 
     return render(request, "accounts/seller_login.html")
 
+@login_required
 def seller_dashboard(request):
         expenses = Expense.objects.filter(seller=request.user)
 
@@ -86,7 +88,11 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
+@login_required
 def add_expense(request):
+    if request.user.role != "SELLER":
+        return redirect("customer_dashboard")
+
     if request.method == "POST":
         name = request.POST.get("name")
         amount = request.POST.get("amount")
@@ -107,8 +113,15 @@ def add_expense(request):
 
     return render(request, "accounts/add_expense.html")
 
+@login_required
 def edit_expense(request, expense_id):
-    expense = Expense.objects.get(id=expense_id)
+    if request.user.role != "SELLER":
+        return redirect("customer_dashboard")
+    expense = get_object_or_404(
+    Expense,
+    id=expense_id,
+    seller=request.user
+    )
 
     if request.method == "POST":
         expense.name = request.POST.get("name")
@@ -125,9 +138,16 @@ def edit_expense(request, expense_id):
         "expense": expense
     })
 
+@login_required
 def delete_expense(request, expense_id):
-    expense = Expense.objects.get(id=expense_id)
+    if request.user.role != "SELLER":
+        return redirect("customer_dashboard")
 
+    expense = get_object_or_404(
+    Expense,
+    id=expense_id,
+    seller=request.user
+)
     if request.method == "POST":
         expense.delete()
         return redirect("seller_dashboard")
